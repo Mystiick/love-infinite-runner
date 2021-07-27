@@ -5,7 +5,7 @@ local sprites = {}
 
 function MainMenu:update(dt)
     if love.keyboard.isDown('space') then
-        current_game_state = 'game'
+        UpdateGameState('game')
     end
 
     redraw_cooldown = redraw_cooldown - dt
