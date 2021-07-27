@@ -49,6 +49,6 @@ end
 
 function UpdateGameState(state)
     print('setting game state to '..state)
-    game_states[state]:init()
+    game_states[state]:init('green')
     current_game_state = state
 end
