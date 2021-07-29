@@ -25,9 +25,8 @@ function love.load()
     S_Tiles = Sprite_Utils.sliceSheet('/assets/tiles_packed.png', {x=18, y=18}, Sprite_Utils.mapTiles)
     S_Characters = Sprite_Utils.sliceSheet('/assets/characters_packed.png', {x=24, y=24}, Sprite_Utils.mapCharacters)
     S_Backgrounds = Sprite_Utils.sliceSheet('/assets/backgrounds_packed.png', {x=24, y=24}, Sprite_Utils.mapBackgrounds)
-    
+
     -- Setup window
-    --love.window.setMode(800, 600, {vsync=true})
     love.window.setTitle(WINDOW_TITLE)
 end
 
@@ -49,6 +48,6 @@ end
 
 function UpdateGameState(state)
     print('setting game state to '..state)
-    game_states[state]:init('green')
+    game_states[state]:init()
     current_game_state = state
 end

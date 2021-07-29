@@ -15,27 +15,18 @@ local world
 local objects = {}
 
 local player = Player()
-local canJump = false
 
 
 local function beginContact(a, b, coll)
 	print(a:getUserData()..' collided with '..b:getUserData())
     
     if a:getUserData() == 'player' or b:getUserData() == 'player' then
-        canJump = true
+        objects.player:land()
     end
-end
-
-local function updatePlatforms(dt)
-    
-    for i = 1, #objects.platforms, 1 do
-        objects.platforms[i]:update(dt)
-    end
-
 end
 
 function Game:init(char)
-    if char == nil or char == '' then        
+    if char == nil or char == '' then
         chosen_character = ({ 'green', 'blue', 'pink', 'yellow', 'pale' })[love.math.random(1, 5)]
         print ('choosing random character: ' .. chosen_character)
     else 
@@ -46,44 +37,35 @@ function Game:init(char)
     love.physics.setMeter(METER_SCALE)
     world = love.physics.newWorld(0, 25 * METER_SCALE, true)
 
-    objects.player = 
-    {
-        body = love.physics.newBody(world, CHAR_SIZE * CHAR_SCALE, 0, 'dynamic'), --setting to dynamic lets it move around
-        shape = love.physics.newRectangleShape(CHAR_SIZE * CHAR_SCALE, CHAR_SIZE * CHAR_SCALE),
-        offset = { x = -CHAR_SIZE * CHAR_SCALE / 2, y = -CHAR_SIZE * CHAR_SCALE / 2 }
-    }
-    objects.player.fixture = love.physics.newFixture(objects.player.body, objects.player.shape, 1) -- density of 1
-    objects.player.fixture:setUserData('player')
-    objects.player.body:setFixedRotation(true) -- Disable rotation on the collider so it doesn't fall of when less than half colliding a platform
-    objects.player.body:setSleepingAllowed(false)
-
+    objects.player = Player(S_Characters[chosen_character], S_Characters.atlas, CHAR_SCALE, CHAR_SIZE, world)
     objects.platforms = { Platform(200, {x=345, y=550}, world), Platform(5, {x=700,y=200}, world), Platform(15, {x=1500,y=350}, world) }
 
     world:setCallbacks(beginContact)
 end
 
 function Game:update(dt)
-    if love.keyboard.isDown('1') then temp = 1 end
-    if love.keyboard.isDown('2') then temp = 2 end
     if love.keyboard.isDown('`') then PAUSE_GAME = true end
+    if love.keyboard.isDown('r') then UpdateGameState('game') end
 
-    if love.keyboard.isDown('space') and canJump then
-        objects.player.body:setLinearVelocity(0, 0)
-        objects.player.body:applyLinearImpulse(0, -1250)
-        canJump = false
+    if love.keyboard.isDown('space') and objects.player.can_jump then
+        objects.player:jump()
     end
 
-    updatePlatforms(dt)
+    objects.player:update(dt)
+    for i = 1, #objects.platforms, 1 do
+        objects.platforms[i]:update(dt)
+    end
+
     world:update(dt)
 end
 
-function Game:draw(sprite_maps)
+function Game:draw()
     -- First, draw the background
     love.graphics.draw(S_Backgrounds.atlas, S_Backgrounds.brown[2], 0, 0, 0, 25, 25)
     love.graphics.draw(S_Backgrounds.atlas, S_Backgrounds.green[2], 25*24, 0, 0, 25, 25)
 
     -- Then draw the character
-    love.graphics.draw(S_Characters.atlas, S_Characters[chosen_character][temp], objects.player.body:getX()+objects.player.offset.x, objects.player.body:getY()+objects.player.offset.y, 0, -CHAR_SCALE, CHAR_SCALE, 24, -1)
+    love.graphics.draw(objects.player.atlas, objects.player:getSprite(), objects.player:getX(), objects.player:getY(), 0, -CHAR_SCALE, CHAR_SCALE, 24, -1)
 
     -- Then draw the platforms/enemies
     for i = 1, #objects.platforms, 1 do
