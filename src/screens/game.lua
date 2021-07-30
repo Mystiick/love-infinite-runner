@@ -1,7 +1,6 @@
 local Game = Object:extend()
 local Player = require('/entities/player')
 local Platform = require('/entities/platform')
-local temp = 1
 local chosen_character
 
 local CHAR_SIZE = 24
@@ -13,9 +12,6 @@ local METER_SCALE = 64
 local world
 --- table that contains all of the physical objects
 local objects = {}
-
-local player = Player()
-
 
 local function beginContact(a, b, coll)
 	print(a:getUserData()..' collided with '..b:getUserData())

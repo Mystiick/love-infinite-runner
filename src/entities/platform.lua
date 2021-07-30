@@ -3,9 +3,9 @@ local TILE_SIZE = 18*3 -- 3=scale
 local PLATFORM_SPEED = 500
 
 --- Creates a new platform object
--- @param   size        integer containing the size 
--- @param   position    x/y object defining the center of the platform
--- @param   world       love.physics.world object to attach 
+--- @param   size        integer    # Number of platforms to render
+--- @param   position    table      # x/y table defining the center of the platform
+--- @param   world       love.World # love.physics.world object to attach 
 function Platform:new(size, position, world)
 
     self.tiles = {}
@@ -19,7 +19,7 @@ function Platform:new(size, position, world)
     self.fixture:setUserData('platform')
 
     for i = 1, size, 1 do
-        self.tiles[i] = 
+        self.tiles[i] =
         {
             offset = {x = -self.pixel_size.x / 2 + ((i-1)*TILE_SIZE), y = -self.pixel_size.y / 2},
             sprite = S_Tiles.grass_platform[2] --default to the center sprite

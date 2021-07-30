@@ -1,9 +1,9 @@
 local Player = Object:extend()
 
 --- Instantiates a new player object
--- @param   sprite_sheet    array containing the quads for animation
--- @param   atlas           sprite atlas associated with the @sprite_sheet
--- @param   scale           int for the scale of sprite and colliders
+--- @param   sprite_sheet    love.Quad[]    # array containing the quads for animation
+--- @param   atlas           love.image     # atlas associated with the sprite_sheet
+--- @param   scale           integer        # for the scale of sprite and colliders
 function Player:new(sprite_sheet, atlas, scale, pixel_size, world)
     self.sprite_sheet = sprite_sheet
     self.atlas = atlas

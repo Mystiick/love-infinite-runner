@@ -19,7 +19,7 @@ local game_states =
 }
 
 --- Called once immediately when the game launches.
---  Loads textures, sounds, and sets up the window
+--- Loads textures, sounds, and sets up the window
 function love.load()
     -- Load assets
     S_Tiles = Sprite_Utils.sliceSheet('/assets/tiles_packed.png', {x=18, y=18}, Sprite_Utils.mapTiles)
@@ -43,7 +43,7 @@ end
 
 --- Basic draw call. Calls the draw function on the current game state
 function love.draw()
-    game_states[current_game_state]:draw(sprite_maps)
+    game_states[current_game_state]:draw()
 end
 
 function UpdateGameState(state)
